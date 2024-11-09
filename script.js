@@ -44,20 +44,38 @@ function addBookToLibrary(title, author, pages, read) {
 
 function displayLibrary() {
   let childArray = [];
-  for (const book of myLibrary) {
+  myLibrary.forEach((book, index) => {
     const card = document.createElement("div");
     card.classList = "card";
     const title = document.createElement("h3");
     const author = document.createElement("p");
     const pages = document.createElement("p");
     const read = document.createElement("p");
+
+    const delBtn = document.createElement("button");
+    delBtn.textContent = "Delete";
+    delBtn.dataset.index = index;
+    delBtn.addEventListener("click", (e) => {
+      myLibrary.splice(e.target.dataset.index, 1);
+      displayLibrary();
+    });
+
+    const readBtn = document.createElement("button");
+    readBtn.textContent = "Toggle Read";
+    readBtn.dataset.index = index;
+    readBtn.addEventListener("click", (e) => {
+      let val = myLibrary[e.target.dataset.index].read;
+      myLibrary[e.target.dataset.index].read = !val;
+      displayLibrary();
+    });
+
     title.textContent = book.title;
     author.textContent = book.author;
     pages.textContent = `${book.pages} pages`;
     read.textContent = book.read ? "Read" : "Not read yet";
-    card.append(title, author, pages, read);
+    card.append(title, author, pages, read, delBtn, readBtn);
     childArray.push(card);
-  }
+  });
   cardContainer.replaceChildren(...childArray);
 }
 
