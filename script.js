@@ -2,24 +2,32 @@ const myLibrary = [];
 const cardContainer = document.querySelector(".card-container");
 const dialog = document.querySelector(".book-form");
 const bookForm = document.querySelector(".book-form>form");
-const showButton = document.querySelector(".add-book");
-const closeButton = document.querySelector(".cancel-book");
-const submitButton = document.querySelector(".submit-book");
 
-showButton.addEventListener("click", () => {
+document.querySelector(".add-book").addEventListener("click", () => {
   dialog.showModal();
 });
 
-closeButton.addEventListener("click", () => {
+document.querySelector(".cancel-book").addEventListener("click", () => {
   dialog.close();
 });
 
-submitButton.addEventListener("click", () => {
-  let title = document.getElementById("name");
-  let author = document.getElementById("author");
-  let pages = document.getElementById("pages");
-  let read = document.getElementById("read");
+let title = document.getElementById("name");
+title.addEventListener("input", (_e) => checkValid(title));
+let author = document.getElementById("author");
+author.addEventListener("input", (_e) => checkValid(author));
+let pages = document.getElementById("pages");
+pages.addEventListener("input", (_e) => checkValid(pages));
+let read = document.getElementById("read");
 
+function checkValid(element) {
+  if (element.validity.valueMissing) {
+    element.setCustomValidity("This cannot be empty!");
+  } else {
+    element.setCustomValidity("");
+  }
+}
+
+bookForm.addEventListener("submit", (_e) => {
   addBookToLibrary(
     title.value,
     author.value,
@@ -28,6 +36,7 @@ submitButton.addEventListener("click", () => {
   );
 
   displayLibrary();
+  bookForm.reset();
 });
 
 class Book {
